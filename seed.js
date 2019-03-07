@@ -8,12 +8,22 @@ const userData = [
   {email: 'trygstad@yahoo.com', password: 'qwerty'}
 ]
 const locationData = [
-  {message: 'hello1', latitude: 41.890172, longitude: -87.626822},
+  {
+    message: 'hello1',
+    latitude: 41.890172,
+    longitude: -87.626822,
+    public: false
+  },
   {message: 'hello2', latitude: 41.892881, longitude: -87.63305},
   {message: 'hello3', latitude: 41.896665, longitude: -87.623105},
   {message: 'hello4', latitude: 41.899412, longitude: -87.629797},
   {message: 'hello5', latitude: 41.885095, longitude: -87.622815},
-  {message: 'hello6', latitude: 41.886884, longitude: -87.647523},
+  {
+    message: 'hello6',
+    latitude: 41.886884,
+    longitude: -87.647523,
+    public: false
+  },
   {message: 'hello7', latitude: 41.894552, longitude: -87.660907},
   {message: 'hello8', latitude: 41.882539, longitude: -87.621442},
   {message: 'hello9', latitude: 41.883817, longitude: -87.632767},

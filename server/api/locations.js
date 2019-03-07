@@ -8,7 +8,11 @@ router.get('/', async (req, res, next) => {
       const userLocations = await Location.findAll({where: {userId}})
       res.json(userLocations)
     } else {
-      const allLocations = await Location.findAll()
+      const allLocations = await Location.findAll({
+        where: {
+          public: true
+        }
+      })
       res.json(allLocations)
     }
   } catch (err) {

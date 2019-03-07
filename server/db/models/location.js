@@ -13,6 +13,10 @@ const Location = db.define('location', {
   longitude: {
     type: Sequelize.DECIMAL(8, 4),
     allowNull: false
+  },
+  public: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   }
 })
 
