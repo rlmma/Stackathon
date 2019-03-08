@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 // import { Map, Marker, Popup, TileLayer, Tooltip, Circle } from 'react-leaflet';
 import {Map as LeafletMap, TileLayer, Marker, Popup} from 'react-leaflet'
 import {addLocation} from '../store/location'
+import {Speech} from '../components'
 
 // const url = 'https://api.spacexdata.com/v2/launchpads';
 // const leafURL = "https://api.mapbox.com/styles/v1/nicknyr/cje7mtk2y6gf92snsydobiahf/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoibmlja255ciIsImEiOiJjajduNGptZWQxZml2MndvNjk4eGtwbDRkIn0.L0aWwfHlFJVGa-WOj7EHaA";
@@ -51,6 +52,15 @@ class MapView extends React.Component {
   render() {
     return (
       <div>
+        {this.state.isClicked ? (
+          <div>
+            <Speech
+              marker={this.state.markers[this.state.markers.length - 1]}
+            />
+          </div>
+        ) : (
+          ''
+        )}
         {this.state.isClicked ? (
           <form onSubmit={this.saveMarker}>
             <input onChange={this.saveMessage} placeholder="your message" />
