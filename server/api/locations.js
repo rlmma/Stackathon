@@ -20,4 +20,16 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+router.post('/', async (req, res, next) => {
+  try {
+    const userId = req.user.id
+    const data = req.body
+    const location = {...data, userId}
+    const newLocation = await Location.create(location)
+    res.status(201).json(newLocation)
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = router

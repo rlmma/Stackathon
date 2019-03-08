@@ -5,6 +5,7 @@ import history from '../history'
  * ACTION TYPES
  */
 const GET_LOCATIONS = 'GET_LOCATIONS'
+const ADD_LOCATIONS = 'ADD_LOCATIONS'
 // const REMOVE_USER_LOCATION = 'REMOVE_USER_LOCATION'
 // const ADD_USER_LOCATION = 'ADD_USER_LOCATION'
 
@@ -17,7 +18,7 @@ const defaultLocations = []
  * ACTION CREATORS
  */
 const getUserLoc = locations => ({type: GET_LOCATIONS, locations})
-
+const addLoc = location => ({type: ADD_LOCATIONS, location})
 /**
  * THUNK CREATORS
  */
@@ -43,10 +44,22 @@ export const fetchLocations = userId => async dispatch => {
   }
 }
 
+export const addLocation = (obj, userId) => async dispatch => {
+  try {
+    const params = {userId}
+    const {data} = await axios.post('/api/locations', obj, {params})
+    dispatch(addLoc(data))
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export default function(state = defaultLocations, action) {
   switch (action.type) {
     case GET_LOCATIONS:
       return action.locations
+    case ADD_LOCATIONS:
+      return [...state, action.location]
     default:
       return state
   }
