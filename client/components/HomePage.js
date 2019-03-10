@@ -14,7 +14,8 @@ export class HomePage extends React.Component {
     const markers = this.props.locations.map(location => ({
       id: location.id,
       marker: [location.latitude, location.longitude],
-      message: location.message
+      message: location.message,
+      category: location.category
     }))
 
     return (

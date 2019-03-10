@@ -10,24 +10,34 @@ const userData = [
 const locationData = [
   {
     message: 'hello1',
-    latitude: 41.890172,
-    longitude: -87.626822,
+    latitude: 41.8901722,
+    longitude: -87.6268221,
     public: false
   },
-  {message: 'hello2', latitude: 41.892881, longitude: -87.63305},
-  {message: 'hello3', latitude: 41.896665, longitude: -87.623105},
-  {message: 'hello4', latitude: 41.899412, longitude: -87.629797},
-  {message: 'hello5', latitude: 41.885095, longitude: -87.622815},
+  {
+    message: 'hello2',
+    latitude: 41.8928812,
+    longitude: -87.633054,
+    category: 'memories'
+  },
+  {message: 'hello3', latitude: 41.8966653, longitude: -87.6231055},
+  {message: 'hello4', latitude: 41.8994121, longitude: -87.6297974},
+  {
+    message: 'hello5',
+    latitude: 41.8850925,
+    longitude: -87.6228153,
+    category: 'memories'
+  },
   {
     message: 'hello6',
     latitude: 41.886884,
     longitude: -87.647523,
     public: false
   },
-  {message: 'hello7', latitude: 41.894552, longitude: -87.660907},
-  {message: 'hello8', latitude: 41.882539, longitude: -87.621442},
-  {message: 'hello9', latitude: 41.883817, longitude: -87.632767},
-  {message: 'hello10', latitude: 41.879983, longitude: -87.620069}
+  {message: 'hello7', latitude: 41.8945522, longitude: -87.6609077},
+  {message: 'hello8', latitude: 41.8825394, longitude: -87.6214428},
+  {message: 'hello9', latitude: 41.8838175, longitude: -87.6327679},
+  {message: 'hello10', latitude: 41.8799836, longitude: -87.6200696}
 ]
 
 const seed = async () => {

@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import locations from './location'
+import geolocation from './geolocation'
 
 const reducer = combineReducers({
   user,
-  locations
+  locations,
+  geolocation
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))

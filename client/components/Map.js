@@ -3,10 +3,51 @@ import {connect} from 'react-redux'
 // import { Map, Marker, Popup, TileLayer, Tooltip, Circle } from 'react-leaflet';
 import {Map as LeafletMap, TileLayer, Marker, Popup} from 'react-leaflet'
 import {addLocation} from '../store/location'
-import {Speech} from '../components'
+import {Speech, Geolocated} from '../components'
+import L from 'leaflet'
 
-// const url = 'https://api.spacexdata.com/v2/launchpads';
-// const leafURL = "https://api.mapbox.com/styles/v1/nicknyr/cje7mtk2y6gf92snsydobiahf/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoibmlja255ciIsImEiOiJjajduNGptZWQxZml2MndvNjk4eGtwbDRkIn0.L0aWwfHlFJVGa-WOj7EHaA";
+//const userIcon =  "https://image.flaticon.com/icons/svg/189/189074.svg";
+const defaultUrl = 'https://image.flaticon.com/icons/svg/1502/1502944.svg'
+const happyHourUrl = 'https://image.flaticon.com/icons/svg/1353/1353862.svg'
+const memories = 'https://image.flaticon.com/icons/svg/1102/1102457.svg'
+const visitedPlaces = 'https://image.flaticon.com/icons/svg/190/190411.svg'
+const dreamVacation = 'https://image.flaticon.com/icons/svg/1308/1308430.svg'
+
+export const userIcon = new L.Icon({
+  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1502/1502944.svg',
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [35, 65],
+  shadowAnchor: [20, 92]
+})
+
+const icons = {
+  default: defaultUrl,
+  happyHourUrl,
+  memories: memories,
+  visitedPlaces,
+  dreamVacation
+}
+
+// const url = icons[marker.category]
+// console.log('url', url)
+// const newIcon = new L.Icon({
+//   iconRetinaUrl: url,
+//   iconAnchor: [5, 55],
+//   popupAnchor: [10, -44],
+//   iconSize: [35, 65],
+//   shadowAnchor: [20, 92],
+// })
+
+export const pointerIcon = new L.Icon({
+  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1538/1538096.svg',
+  shadowUrl: 'http://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [35, 65],
+  shadowSize: [68, 95],
+  shadowAnchor: [20, 92]
+})
 
 function roundNumber(rnum, rlength) {
   var newnumber =
@@ -43,13 +84,25 @@ class MapView extends React.Component {
     const lng = this.state.markers[this.state.markers.length - 1].lng
     const obj = {
       message: this.state.message,
-      latitude: roundNumber(lat, 6),
-      longitude: roundNumber(lng, 6)
+      latitude: roundNumber(lat, 7),
+      longitude: roundNumber(lng, 7)
     }
     this.props.addLocation(obj, this.props.userId)
   }
 
+  openPopup(marker) {
+    if (marker && marker.leafletElement) {
+      window.setTimeout(() => {
+        marker.leafletElement.openPopup()
+      })
+    }
+  }
+
   render() {
+    const position = [
+      roundNumber(this.props.geolocation.lat, 7),
+      roundNumber(this.props.geolocation.lng, 7)
+    ]
     return (
       <div>
         {this.state.isClicked ? (
@@ -69,6 +122,7 @@ class MapView extends React.Component {
         ) : (
           ''
         )}
+        <Geolocated />
         <LeafletMap
           center={[41.8902, -87.6268]}
           zoom={13}
@@ -83,6 +137,15 @@ class MapView extends React.Component {
           onClick={this.addMarker}
         >
           <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+          {this.props.geolocation.lat ? (
+            <Marker position={position} icon={userIcon} ref={this.openPopup}>
+              <Popup>
+                You are here <br /> Click to hide this message
+              </Popup>
+            </Marker>
+          ) : (
+            ''
+          )}
           {this.state.markers.map(marker => {
             return (
               <Marker position={[marker.lat, marker.lng]} key={marker.id}>
@@ -92,7 +155,7 @@ class MapView extends React.Component {
           })}
           {this.props.markers.map(marker => {
             return (
-              <Marker position={marker.marker} key={marker.id}>
+              <Marker position={marker.marker} key={marker.id} icon={userIcon}>
                 <Popup>{marker.message}</Popup>
               </Marker>
             )
@@ -103,57 +166,10 @@ class MapView extends React.Component {
   }
 }
 
-// UNSAFE_componentWillMount() {
-//   axios.get(url).then(res => {
-//     this.setState({data: res.data})
-//   }).catch(err => {
-//     console.log('error', err)
-//   })
-// }
-
-//   render() {
-//     const {data} = this.state;
-//     console.log(data);
-//     return (
-//       <div>
-//         <Map
-//           style={{height: "100vh"}}
-//           center={this.state.latlng}
-//           zoom={4}>
-//           <TileLayer
-//             url={leafURL}
-//             attribution="<attribution>" />
-//           {data.map((elem, i) => {
-//             return (
-//               <Marker
-//                 key={i}
-//                 position={{lat:elem.location.latitude, lng: elem.location.longitude}}>
-//                 <Popup>
-//                   <span>
-//                     {elem.full_name}<br />
-//                     {elem.status}<br />
-//                     {elem.details}<br />
-//                     {elem.vehicles_launched.map((elem, i) => {
-//                       return ( <p key={i}>{elem}</p>)
-//                     })}
-//                   </span>
-//                 </Popup>
-//                 <Circle
-//                   center={{lat:elem.location.latitude, lng: elem.location.longitude}}
-//                   fillColor="blue"
-//                   radius={200}/>
-//               </Marker>
-//             )
-//           })}
-//         </Map>
-//       </div>
-//     );
-//   }
-// }
-
 const mapState = state => {
   return {
-    userId: state.user.id
+    userId: state.user.id,
+    geolocation: state.geolocation
   }
 }
 

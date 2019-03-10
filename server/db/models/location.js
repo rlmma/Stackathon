@@ -17,6 +17,10 @@ const Location = db.define('location', {
   public: {
     type: Sequelize.BOOLEAN,
     defaultValue: true
+  },
+  category: {
+    type: Sequelize.STRING,
+    defaultValue: 'default'
   }
 })
 
