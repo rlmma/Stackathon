@@ -11,8 +11,7 @@ const locationData = [
   {
     message: 'hello1',
     latitude: 41.8901722,
-    longitude: -87.6268221,
-    public: false
+    longitude: -87.6268221
   },
   {
     message: 'hello2',
@@ -26,13 +25,13 @@ const locationData = [
     message: 'hello5',
     latitude: 41.8850925,
     longitude: -87.6228153,
-    category: 'memories'
+    category: 'publicMessages'
   },
   {
     message: 'hello6',
-    latitude: 41.886884,
-    longitude: -87.647523,
-    public: false
+    latitude: 41.8850925,
+    longitude: -87.6228153,
+    category: 'publicMessages'
   },
   {message: 'hello7', latitude: 41.8945522, longitude: -87.6609077},
   {message: 'hello8', latitude: 41.8825394, longitude: -87.6214428},

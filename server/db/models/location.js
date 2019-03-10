@@ -14,10 +14,6 @@ const Location = db.define('location', {
     type: Sequelize.DECIMAL(8, 4),
     allowNull: false
   },
-  public: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: true
-  },
   category: {
     type: Sequelize.STRING,
     defaultValue: 'notes'

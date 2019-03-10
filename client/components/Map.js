@@ -94,9 +94,7 @@ class MapView extends React.Component {
       <div>
         {this.state.isClicked ? (
           <div>
-            <Speech
-              marker={this.state.markers[this.state.markers.length - 1]}
-            />
+            <Speech marker={this.state.markers[0]} />
           </div>
         ) : (
           ''
@@ -162,7 +160,6 @@ class MapView extends React.Component {
             })}
             {this.props.markers.map(marker => {
               let choosenIcon
-              if (marker.category === 'default') choosenIcon = defaultIcon
               if (marker.category === 'memories') choosenIcon = memories
               if (marker.category === 'publicMessages')
                 choosenIcon = publicMessages
@@ -174,16 +171,25 @@ class MapView extends React.Component {
                   icon={choosenIcon}
                 >
                   <Popup>
-                    {marker.date}
-                    <br />
-                    {marker.message}
-                    <br />
-                    <button
-                      type="submit"
-                      onClick={() => this.props.deleteLocation(marker.id)}
-                    >
-                      delete
-                    </button>
+                    {marker.message.map((message, idx) => {
+                      return (
+                        <div key={idx}>
+                          {marker.date[idx]}
+                          <br />
+                          {message}
+                        </div>
+                      )
+                    })}
+                    {this.props.path === '/home' ? (
+                      <button
+                        type="submit"
+                        onClick={() => this.props.deleteLocation(marker.id)}
+                      >
+                        delete
+                      </button>
+                    ) : (
+                      ''
+                    )}
                   </Popup>
                 </Marker>
               )
@@ -200,7 +206,11 @@ class MapView extends React.Component {
             </tr>
             {this.props.markers.map(marker => (
               <tr key={marker.id}>
-                <td>{marker.message}</td>
+                <td>
+                  {marker.message.map((message, idx) => {
+                    return <div key={idx}>{message}</div>
+                  })}
+                </td>
                 <td>
                   <button
                     type="submit"

@@ -9,17 +9,32 @@ export class HomePage extends React.Component {
   }
 
   render() {
-    const markers = this.props.locations.map(location => ({
-      id: location.id,
-      marker: [location.latitude, location.longitude],
-      message: location.message,
-      category: location.category,
-      date: location.createdAt.slice(0, 10)
-    }))
+    let notRepeatedLocations = []
+    let extraMessages = []
+    const markers = []
+    this.props.locations.forEach(location => {
+      const loc = `${location.latitude}, ${location.longitude}`
+      const index = notRepeatedLocations.indexOf(loc)
+      if (index === -1) {
+        notRepeatedLocations.push(loc)
+        markers.push({
+          id: location.id,
+          marker: [location.latitude, location.longitude],
+          message: [location.message],
+          category: location.category,
+          date: [location.createdAt.slice(0, 10)]
+        })
+      } else {
+        markers[index].message.push(location.message)
+        markers[index].date.push(location.createdAt.slice(0, 10))
+      }
+    })
+
+    const path = this.props.location.pathname
 
     return (
       <div>
-        <MapView markers={markers} />
+        <MapView markers={markers} path={path} extraMessages={extraMessages} />
       </div>
     )
   }
