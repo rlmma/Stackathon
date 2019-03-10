@@ -20,7 +20,7 @@ const Location = db.define('location', {
   },
   category: {
     type: Sequelize.STRING,
-    defaultValue: 'default'
+    defaultValue: 'notes'
   }
 })
 

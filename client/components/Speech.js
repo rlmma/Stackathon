@@ -18,14 +18,30 @@ const propTypes = {
 }
 
 class Dictaphone extends Component {
+  constructor() {
+    super()
+    this.state = {
+      category: ''
+    }
+  }
+
+  chooseCategory = e => {
+    const category = e.target.value
+    this.setState({category})
+  }
+
   save = transcript => {
-    console.log('wwwwwwww', transcript)
+    this.props.stopListening()
+    this.props.resetTranscript()
     const lat = this.props.marker.lat
     const lng = this.props.marker.lng
+    let category = this.state.category
+    if (category === '') category = 'notes'
     const obj = {
       message: transcript,
       latitude: roundNumber(lat, 6),
-      longitude: roundNumber(lng, 6)
+      longitude: roundNumber(lng, 6),
+      category
     }
     this.props.addLocation(obj, this.props.userId)
   }
@@ -43,8 +59,6 @@ class Dictaphone extends Component {
       return null
     }
 
-    console.log('transcript', this.props)
-
     return (
       <div>
         <button type="submit" onClick={resetTranscript}>
@@ -57,6 +71,12 @@ class Dictaphone extends Component {
           Stop
         </button>
         <span>{transcript}</span>
+        <select onChange={this.chooseCategory}>
+          <option hidden="true">Choose Category</option>
+          <option value="memories">memories</option>
+          <option value="notes">notes</option>
+          <option value="publicMessages">publicMessages</option>
+        </select>
         <button type="submit" onClick={() => this.save(transcript)}>
           Save
         </button>

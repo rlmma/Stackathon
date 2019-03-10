@@ -32,4 +32,32 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+router.delete('/', async (req, res, next) => {
+  try {
+    const {locId} = req.query
+    const deletedLocation = await Location.destroy({
+      where: {
+        id: locId
+      }
+    })
+    res.json(deletedLocation)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.put('/', async (req, res, next) => {
+  try {
+    await Location.update(req.body, {
+      where: {
+        id: req.query.locId
+      }
+    })
+    const updatedLocation = await Location.findById(req.query.locId)
+    res.json(updatedLocation)
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = router

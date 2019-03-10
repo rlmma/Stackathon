@@ -1,49 +1,19 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Map as LeafletMap, TileLayer, Marker, Popup} from 'react-leaflet'
-import {addLocation} from '../store/location'
+import {
+  Map as LeafletMap,
+  TileLayer,
+  Marker,
+  Popup,
+  GeoJSON,
+  withLeaflet
+} from 'react-leaflet'
+import {addLocation, deleteLocation, updateLocation} from '../store/location'
 import {Speech, Geolocated} from '../components'
-import L from 'leaflet'
-
-export const me = new L.Icon({
-  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/876/876335.svg',
-  iconAnchor: [5, 55],
-  popupAnchor: [10, -44],
-  iconSize: [35, 65],
-  shadowAnchor: [20, 92]
-})
-
-export const defaultIcon = new L.Icon({
-  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1502/1502944.svg',
-  iconAnchor: [5, 55],
-  popupAnchor: [10, -44],
-  iconSize: [35, 65],
-  shadowAnchor: [20, 92]
-})
-
-export const notes = new L.Icon({
-  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1102/1102457.svg',
-  iconAnchor: [5, 55],
-  popupAnchor: [10, -44],
-  iconSize: [35, 65],
-  shadowAnchor: [20, 92]
-})
-
-export const memories = new L.Icon({
-  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/646/646801.svg',
-  iconAnchor: [5, 55],
-  popupAnchor: [10, -44],
-  iconSize: [35, 65],
-  shadowAnchor: [20, 92]
-})
-
-export const publicMessages = new L.Icon({
-  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1077/1077909.svg',
-  iconAnchor: [5, 55],
-  popupAnchor: [10, -44],
-  iconSize: [35, 65],
-  shadowAnchor: [20, 92]
-})
+import worldGeoJSON from 'geojson-world-map'
+import {me, defaultIcon, notes, memories, publicMessages} from './icons'
+import {setGeolocation} from '../store/geolocation'
+import GeoSearch from './GeoSearch'
 
 function roundNumber(rnum, rlength) {
   var newnumber =
@@ -57,7 +27,10 @@ class MapView extends React.Component {
     this.state = {
       markers: [],
       isClicked: false,
-      message: ''
+      message: '',
+      category: '',
+      zoom: 13,
+      center: [41.8902, -87.6268]
     }
   }
 
@@ -67,23 +40,32 @@ class MapView extends React.Component {
   }
 
   addMarker = e => {
-    this.setState({isClicked: true})
-    const {markers} = this.state
-    markers.push(e.latlng)
-    this.setState({markers})
-    this.setState({isClicked: true})
+    // const {markers} = this.state
+    // if (markers.length < 2) {
+    //   markers.push(e.latlng)
+    //   this.setState({markers})
+    //   this.setState({isClicked: true})
+    // }
+    this.setState({markers: [e.latlng], isClicked: true})
   }
 
   saveMarker = e => {
     e.preventDefault()
-    const lat = this.state.markers[this.state.markers.length - 1].lat
-    const lng = this.state.markers[this.state.markers.length - 1].lng
-    const obj = {
-      message: this.state.message,
-      latitude: roundNumber(lat, 7),
-      longitude: roundNumber(lng, 7)
-    }
-    this.props.addLocation(obj, this.props.userId)
+    // const lat = this.state.markers[this.state.markers.length - 1].lat
+    // const lng = this.state.markers[this.state.markers.length - 1].lng
+    // let category = this.state.category;
+    // const obj = {
+    //   message: this.state.message,
+    //   latitude: roundNumber(lat, 7),
+    //   longitude: roundNumber(lng, 7),
+    //   category
+    // }
+    // this.props.addLocation(obj, this.props.userId)
+  }
+
+  chooseCategory = e => {
+    const category = e.target.value
+    this.setState({category})
   }
 
   openPopup(marker) {
@@ -94,7 +76,19 @@ class MapView extends React.Component {
     }
   }
 
+  showMarker = marker => {
+    this.props.setGeolocation({})
+    this.setState({center: marker, zoom: 17})
+  }
+
   render() {
+    const GeolocatedBar = withLeaflet(Geolocated)
+    const zoom = this.props.geolocation.zoom
+      ? this.props.geolocation.zoom
+      : this.state.zoom
+    const center = this.props.geolocation.lat
+      ? [this.props.geolocation.lat, this.props.geolocation.lng]
+      : this.state.center
     const position = [
       roundNumber(this.props.geolocation.lat, 7),
       roundNumber(this.props.geolocation.lng, 7)
@@ -113,20 +107,21 @@ class MapView extends React.Component {
         {this.state.isClicked ? (
           <form onSubmit={this.saveMarker}>
             <input onChange={this.saveMessage} placeholder="your message" />
-            <select>
-              <option>memories</option>
-              <option>notes</option>
-              <option>publicMessages</option>
+            <select onChange={this.chooseCategory}>
+              <option hidden="true">Choose Category</option>
+              <option value="memories">memories</option>
+              <option value="notes">notes</option>
+              <option value="publicMessages">publicMessages</option>
             </select>
             <button type="submit">save</button>
           </form>
         ) : (
           ''
         )}
-        <Geolocated />
+        <GeolocatedBar />
         <LeafletMap
-          center={[41.8902, -87.6268]}
-          zoom={13}
+          center={center}
+          zoom={zoom}
           maxZoom={20}
           attributionControl={true}
           zoomControl={true}
@@ -137,6 +132,15 @@ class MapView extends React.Component {
           easeLinearity={0.35}
           onClick={this.addMarker}
         >
+          <GeoJSON
+            data={worldGeoJSON}
+            style={() => ({
+              color: '#4a83ec',
+              weight: 5,
+              fillColor: '#1a1d62',
+              fillOpacity: 0.4
+            })}
+          />
           <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
           {this.props.geolocation.lat ? (
             <Marker position={position} icon={me} ref={this.openPopup}>
@@ -160,7 +164,6 @@ class MapView extends React.Component {
           })}
           {this.props.markers.map(marker => {
             let choosenIcon
-            console.log(marker.category)
             if (marker.category === 'default') choosenIcon = defaultIcon
             if (marker.category === 'memories') choosenIcon = memories
             if (marker.category === 'publicMessages')
@@ -179,7 +182,7 @@ class MapView extends React.Component {
                   <br />
                   <button
                     type="submit"
-                    onClick={() => console.log('delete', marker.id)}
+                    onClick={() => this.props.deleteLocation(marker.id)}
                   >
                     delete
                   </button>
@@ -187,7 +190,24 @@ class MapView extends React.Component {
               </Marker>
             )
           })}
+          GeoSearch
         </LeafletMap>
+        <table>
+          <tr>
+            <th>all notes</th>
+          </tr>
+          {this.props.markers.map(marker => (
+            <tr key={marker.id}>
+              <td>{marker.message}</td>
+              <button
+                type="submit"
+                onClick={() => this.showMarker(marker.marker)}
+              >
+                show on map
+              </button>
+            </tr>
+          ))}
+        </table>
       </div>
     )
   }
@@ -202,7 +222,10 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    addLocation: (obj, userId) => dispatch(addLocation(obj, userId))
+    addLocation: (obj, userId) => dispatch(addLocation(obj, userId)),
+    setGeolocation: coords => dispatch(setGeolocation(coords)),
+    updateLocation: (obj, locId) => dispatch(updateLocation(obj, locId)),
+    deleteLocation: locId => dispatch(deleteLocation(locId))
   }
 }
 

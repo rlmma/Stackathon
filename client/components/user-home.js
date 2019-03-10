@@ -23,29 +23,16 @@ export class UserHome extends Component {
 
     return (
       <div>
-        <h3>Your map</h3>
         <MapView markers={markers} />
         {/* <table>
           <tr>
-            <th>message</th>
-            <th>edit</th>
-            <th>delete</th>
+             <th>all notes</th>
           </tr>
-
-            { this.props.location((marker, idx) => {
-              return (
-              <tr>
-                <td>id{idx}</td>
-                  <td>
-                    <form onSubmit={this.editMarker}>
-                      <input placeholder={marker.message} />
-                    </form>
-                  </td>
-                <td>
-                   <button type="submit" onSubmit={this.deleteMarker}>delete</button>
-                </td>
-              </tr>
-            )})}
+            {markers.map((marker) => (
+            <tr key = {marker.id}>
+              <td>{marker.message}</td>
+            </tr>
+            ))}
         </table> */}
       </div>
     )
