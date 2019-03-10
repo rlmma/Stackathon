@@ -82,6 +82,7 @@ class MapView extends React.Component {
   }
 
   render() {
+    const GeoSearchBar = withLeaflet(GeoSearch)
     const GeolocatedBar = withLeaflet(Geolocated)
     const zoom = this.props.geolocation.zoom
       ? this.props.geolocation.zoom
@@ -190,7 +191,9 @@ class MapView extends React.Component {
               </Marker>
             )
           })}
-          GeoSearch
+          <div>
+            <GeoSearchBar />
+          </div>
         </LeafletMap>
         <table>
           <tr>

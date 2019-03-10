@@ -1,19 +1,27 @@
 import React, {Component} from 'react'
 import {withLeaflet, MapControl} from 'react-leaflet'
 import L from 'leaflet'
-import {OpenStreetMapProvider, GeoSearchControl} from 'leaflet-geosearch'
+import {GeoSearchControl, OpenStreetMapProvider} from 'leaflet-geosearch'
 
 class GeoSearch extends MapControl {
-  constructor(props, context) {
-    super(props)
-  }
+  // constructor(props, context) {
+  //   super(props)
+  // }
 
   createLeafletElement(opts) {
     const provider = new OpenStreetMapProvider()
     const searchControl = new GeoSearchControl({
       provider: provider,
-      //position: "topleft",
-      style: 'bar'
+      // position: "topleft",
+      position: 'bottomleft',
+      style: 'button',
+      showMarker: true,
+      showPopup: false,
+      autoClose: true,
+      retainZoomLevel: false,
+      animateZoom: true,
+      keepResult: false,
+      searchLabel: 'search'
     })
 
     return searchControl
@@ -25,4 +33,4 @@ class GeoSearch extends MapControl {
   }
 }
 
-export default withLeaflet(GeoSearch)
+export default GeoSearch

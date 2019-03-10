@@ -45,6 +45,7 @@
     "geojson-world-map": "0.0.2",
     "history": "^4.6.3",
     "leaflet": "^1.4.0",
+    "leaflet-geosearch": "^2.7.0",
     "morgan": "^1.8.1",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
