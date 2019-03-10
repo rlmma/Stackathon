@@ -1,19 +1,19 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import { Map, Marker, Popup, TileLayer, Tooltip, Circle } from 'react-leaflet';
 import {Map as LeafletMap, TileLayer, Marker, Popup} from 'react-leaflet'
 import {addLocation} from '../store/location'
 import {Speech, Geolocated} from '../components'
 import L from 'leaflet'
 
-//const userIcon =  "https://image.flaticon.com/icons/svg/189/189074.svg";
-const defaultUrl = 'https://image.flaticon.com/icons/svg/1502/1502944.svg'
-const happyHourUrl = 'https://image.flaticon.com/icons/svg/1353/1353862.svg'
-const memories = 'https://image.flaticon.com/icons/svg/1102/1102457.svg'
-const visitedPlaces = 'https://image.flaticon.com/icons/svg/190/190411.svg'
-const dreamVacation = 'https://image.flaticon.com/icons/svg/1308/1308430.svg'
+export const me = new L.Icon({
+  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/876/876335.svg',
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [35, 65],
+  shadowAnchor: [20, 92]
+})
 
-export const userIcon = new L.Icon({
+export const defaultIcon = new L.Icon({
   iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1502/1502944.svg',
   iconAnchor: [5, 55],
   popupAnchor: [10, -44],
@@ -21,31 +21,27 @@ export const userIcon = new L.Icon({
   shadowAnchor: [20, 92]
 })
 
-const icons = {
-  default: defaultUrl,
-  happyHourUrl,
-  memories: memories,
-  visitedPlaces,
-  dreamVacation
-}
-
-// const url = icons[marker.category]
-// console.log('url', url)
-// const newIcon = new L.Icon({
-//   iconRetinaUrl: url,
-//   iconAnchor: [5, 55],
-//   popupAnchor: [10, -44],
-//   iconSize: [35, 65],
-//   shadowAnchor: [20, 92],
-// })
-
-export const pointerIcon = new L.Icon({
-  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1538/1538096.svg',
-  shadowUrl: 'http://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+export const notes = new L.Icon({
+  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1102/1102457.svg',
   iconAnchor: [5, 55],
   popupAnchor: [10, -44],
   iconSize: [35, 65],
-  shadowSize: [68, 95],
+  shadowAnchor: [20, 92]
+})
+
+export const memories = new L.Icon({
+  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/646/646801.svg',
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [35, 65],
+  shadowAnchor: [20, 92]
+})
+
+export const publicMessages = new L.Icon({
+  iconRetinaUrl: 'https://image.flaticon.com/icons/svg/1077/1077909.svg',
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [35, 65],
   shadowAnchor: [20, 92]
 })
 
@@ -117,6 +113,11 @@ class MapView extends React.Component {
         {this.state.isClicked ? (
           <form onSubmit={this.saveMarker}>
             <input onChange={this.saveMessage} placeholder="your message" />
+            <select>
+              <option>memories</option>
+              <option>notes</option>
+              <option>publicMessages</option>
+            </select>
             <button type="submit">save</button>
           </form>
         ) : (
@@ -138,7 +139,7 @@ class MapView extends React.Component {
         >
           <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
           {this.props.geolocation.lat ? (
-            <Marker position={position} icon={userIcon} ref={this.openPopup}>
+            <Marker position={position} icon={me} ref={this.openPopup}>
               <Popup>
                 You are here <br /> Click to hide this message
               </Popup>
@@ -148,15 +149,41 @@ class MapView extends React.Component {
           )}
           {this.state.markers.map(marker => {
             return (
-              <Marker position={[marker.lat, marker.lng]} key={marker.id}>
+              <Marker
+                position={[marker.lat, marker.lng]}
+                key={marker.id}
+                icon={defaultIcon}
+              >
                 <Popup>{marker.message}</Popup>
               </Marker>
             )
           })}
           {this.props.markers.map(marker => {
+            let choosenIcon
+            console.log(marker.category)
+            if (marker.category === 'default') choosenIcon = defaultIcon
+            if (marker.category === 'memories') choosenIcon = memories
+            if (marker.category === 'publicMessages')
+              choosenIcon = publicMessages
+            if (marker.category === 'notes') choosenIcon = notes
             return (
-              <Marker position={marker.marker} key={marker.id} icon={userIcon}>
-                <Popup>{marker.message}</Popup>
+              <Marker
+                position={marker.marker}
+                key={marker.id}
+                icon={choosenIcon}
+              >
+                <Popup>
+                  {marker.date}
+                  <br />
+                  {marker.message}
+                  <br />
+                  <button
+                    type="submit"
+                    onClick={() => console.log('delete', marker.id)}
+                  >
+                    delete
+                  </button>
+                </Popup>
               </Marker>
             )
           })}

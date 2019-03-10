@@ -16,7 +16,9 @@ export class UserHome extends Component {
     const markers = this.props.locations.map(location => ({
       id: location.id,
       marker: [location.latitude, location.longitude],
-      message: location.message
+      message: location.message,
+      category: location.category,
+      date: location.createdAt.slice(0, 10)
     }))
 
     return (

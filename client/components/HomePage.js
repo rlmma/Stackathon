@@ -15,7 +15,8 @@ export class HomePage extends React.Component {
       id: location.id,
       marker: [location.latitude, location.longitude],
       message: location.message,
-      category: location.category
+      category: location.category,
+      date: location.createdAt.slice(0, 10)
     }))
 
     return (
