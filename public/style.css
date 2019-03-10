@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  background-image: url('compass.jpg');
 }
 
 a {
@@ -13,9 +14,78 @@ label {
 nav a {
   display: inline-block;
   margin: 1em;
+  color: #dddddd;
+  font-family: 'Impact', fantasy, serif;
 }
+
+nav {
+  background-color: #333;
+}
+
+/* url('compass.jpg') */
 
 form div {
   margin: 1em;
   display: inline-block;
 }
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  /* border: 1px solid #dddddd; */
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  /* background-color: #dddddd; */
+}
+
+.mapFlex {
+  display: flex;
+}
+
+.mapShrink {
+  flex-shrink: 1;
+}
+
+.tableShrink {
+  flex-shrink: 4;
+}
+
+/* button {
+   display:inline-block;
+   padding:0.5em 3em;
+   border:0.16em solid #FFFFFF;
+   margin:0 0.3em 0.3em 0;
+   box-sizing: border-box;
+   text-decoration:none;
+   text-transform:uppercase;
+   font-family:'Roboto',sans-serif;
+   font-weight:400;
+   color:#FFFFFF;
+   text-align:center;
+   transition: all 0.15s;
+} */
+
+button {
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: 1px solid #382b1b;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #382b1b;
+  color: white;
+}
+
+/* button:hover {
+   color:#DDDDDD;
+   border-color:#DDDDDD;
+} */

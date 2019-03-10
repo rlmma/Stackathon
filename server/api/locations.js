@@ -10,7 +10,7 @@ router.get('/', async (req, res, next) => {
     } else {
       const allLocations = await Location.findAll({
         where: {
-          public: true
+          category: 'publicMessages'
         }
       })
       res.json(allLocations)

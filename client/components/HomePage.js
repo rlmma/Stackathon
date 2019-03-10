@@ -9,8 +9,6 @@ export class HomePage extends React.Component {
   }
 
   render() {
-    // const markers = [{'id': 1, 'marker': [50, 11]}, {'id': 1, 'marker': [55, 12]}]
-
     const markers = this.props.locations.map(location => ({
       id: location.id,
       marker: [location.latitude, location.longitude],
@@ -21,7 +19,6 @@ export class HomePage extends React.Component {
 
     return (
       <div>
-        <h3>Welcome, </h3>
         <MapView markers={markers} />
       </div>
     )

@@ -56,6 +56,7 @@
     "react-dom": "^16.4.2",
     "react-geolocated": "^2.4.1",
     "react-leaflet": "^2.2.1",
+    "react-leaflet-control": "^2.1.1",
     "react-leaflet-div-icon": "^1.1.0",
     "react-redux": "^5.0.2",
     "react-router-dom": "^4.3.1",

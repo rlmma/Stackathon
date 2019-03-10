@@ -14,6 +14,7 @@ import worldGeoJSON from 'geojson-world-map'
 import {me, defaultIcon, notes, memories, publicMessages} from './icons'
 import {setGeolocation} from '../store/geolocation'
 import GeoSearch from './GeoSearch'
+import Control from 'react-leaflet-control'
 
 function roundNumber(rnum, rlength) {
   var newnumber =
@@ -28,7 +29,7 @@ class MapView extends React.Component {
       markers: [],
       isClicked: false,
       message: '',
-      category: '',
+      category: 'notes',
       zoom: 13,
       center: [41.8902, -87.6268]
     }
@@ -40,27 +41,22 @@ class MapView extends React.Component {
   }
 
   addMarker = e => {
-    // const {markers} = this.state
-    // if (markers.length < 2) {
-    //   markers.push(e.latlng)
-    //   this.setState({markers})
-    //   this.setState({isClicked: true})
-    // }
     this.setState({markers: [e.latlng], isClicked: true})
   }
 
   saveMarker = e => {
     e.preventDefault()
-    // const lat = this.state.markers[this.state.markers.length - 1].lat
-    // const lng = this.state.markers[this.state.markers.length - 1].lng
-    // let category = this.state.category;
-    // const obj = {
-    //   message: this.state.message,
-    //   latitude: roundNumber(lat, 7),
-    //   longitude: roundNumber(lng, 7),
-    //   category
-    // }
-    // this.props.addLocation(obj, this.props.userId)
+    const lat = this.state.markers[0].lat
+    const lng = this.state.markers[0].lng
+    let category = this.state.category
+    const obj = {
+      message: this.state.message,
+      latitude: roundNumber(lat, 7),
+      longitude: roundNumber(lng, 7),
+      category
+    }
+    this.props.addLocation(obj, this.props.userId)
+    this.setState({markers: [], isClicked: false})
   }
 
   chooseCategory = e => {
@@ -119,98 +115,104 @@ class MapView extends React.Component {
         ) : (
           ''
         )}
-        <GeolocatedBar />
-        <LeafletMap
-          center={center}
-          zoom={zoom}
-          maxZoom={20}
-          attributionControl={true}
-          zoomControl={true}
-          doubleClickZoom={true}
-          scrollWheelZoom={true}
-          dragging={true}
-          animate={true}
-          easeLinearity={0.35}
-          onClick={this.addMarker}
-        >
-          <GeoJSON
-            data={worldGeoJSON}
-            style={() => ({
-              color: '#4a83ec',
-              weight: 5,
-              fillColor: '#1a1d62',
-              fillOpacity: 0.4
-            })}
-          />
-          <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-          {this.props.geolocation.lat ? (
-            <Marker position={position} icon={me} ref={this.openPopup}>
-              <Popup>
-                You are here <br /> Click to hide this message
-              </Popup>
-            </Marker>
-          ) : (
-            ''
-          )}
-          {this.state.markers.map(marker => {
-            return (
-              <Marker
-                position={[marker.lat, marker.lng]}
-                key={marker.id}
-                icon={defaultIcon}
-              >
-                <Popup>{marker.message}</Popup>
-              </Marker>
-            )
-          })}
-          {this.props.markers.map(marker => {
-            let choosenIcon
-            if (marker.category === 'default') choosenIcon = defaultIcon
-            if (marker.category === 'memories') choosenIcon = memories
-            if (marker.category === 'publicMessages')
-              choosenIcon = publicMessages
-            if (marker.category === 'notes') choosenIcon = notes
-            return (
-              <Marker
-                position={marker.marker}
-                key={marker.id}
-                icon={choosenIcon}
-              >
+        <div className="mapFlex">
+          <LeafletMap
+            className="mapShrink"
+            center={center}
+            zoom={zoom}
+            maxZoom={20}
+            attributionControl={true}
+            zoomControl={true}
+            doubleClickZoom={true}
+            scrollWheelZoom={true}
+            dragging={true}
+            animate={true}
+            easeLinearity={0.35}
+            onClick={this.addMarker}
+          >
+            <GeoJSON
+              data={worldGeoJSON}
+              style={() => ({
+                color: '#75361c',
+                weight: 5,
+                fillColor: '#333',
+                fillOpacity: 0.25
+              })}
+            />
+            <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+            {this.props.geolocation.lat ? (
+              <Marker position={position} icon={me} ref={this.openPopup}>
                 <Popup>
-                  {marker.date}
-                  <br />
-                  {marker.message}
-                  <br />
-                  <button
-                    type="submit"
-                    onClick={() => this.props.deleteLocation(marker.id)}
-                  >
-                    delete
-                  </button>
+                  You are here <br /> Click to hide this message
                 </Popup>
               </Marker>
-            )
-          })}
-          <div>
+            ) : (
+              ''
+            )}
+            {this.state.markers.map(marker => {
+              return (
+                <Marker
+                  position={[marker.lat, marker.lng]}
+                  key={marker.id}
+                  icon={defaultIcon}
+                >
+                  <Popup>{marker.message}</Popup>
+                </Marker>
+              )
+            })}
+            {this.props.markers.map(marker => {
+              let choosenIcon
+              if (marker.category === 'default') choosenIcon = defaultIcon
+              if (marker.category === 'memories') choosenIcon = memories
+              if (marker.category === 'publicMessages')
+                choosenIcon = publicMessages
+              if (marker.category === 'notes') choosenIcon = notes
+              return (
+                <Marker
+                  position={marker.marker}
+                  key={marker.id}
+                  icon={choosenIcon}
+                >
+                  <Popup>
+                    {marker.date}
+                    <br />
+                    {marker.message}
+                    <br />
+                    <button
+                      type="submit"
+                      onClick={() => this.props.deleteLocation(marker.id)}
+                    >
+                      delete
+                    </button>
+                  </Popup>
+                </Marker>
+              )
+            })}
             <GeoSearchBar />
-          </div>
-        </LeafletMap>
-        <table>
-          <tr>
-            <th>all notes</th>
-          </tr>
-          {this.props.markers.map(marker => (
-            <tr key={marker.id}>
-              <td>{marker.message}</td>
-              <button
-                type="submit"
-                onClick={() => this.showMarker(marker.marker)}
-              >
-                show on map
-              </button>
+            <Control position="topright">
+              <GeolocatedBar />
+            </Control>
+          </LeafletMap>
+          <table className="tableShrink">
+            <tr>
+              <th>all notes</th>
+              <th>show on map</th>
             </tr>
-          ))}
-        </table>
+            {this.props.markers.map(marker => (
+              <tr key={marker.id}>
+                <td>{marker.message}</td>
+                <td>
+                  <button
+                    type="submit"
+                    onClick={() => this.showMarker(marker.marker)}
+                  >
+                    show on map
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </table>
+        </div>
       </div>
     )
   }

@@ -4,16 +4,12 @@ import L from 'leaflet'
 import {GeoSearchControl, OpenStreetMapProvider} from 'leaflet-geosearch'
 
 class GeoSearch extends MapControl {
-  // constructor(props, context) {
-  //   super(props)
-  // }
-
   createLeafletElement(opts) {
     const provider = new OpenStreetMapProvider()
     const searchControl = new GeoSearchControl({
       provider: provider,
-      // position: "topleft",
-      position: 'bottomleft',
+      position: 'topleft',
+      // position: 'bottomleft',
       style: 'button',
       showMarker: true,
       showPopup: false,
