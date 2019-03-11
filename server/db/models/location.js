@@ -3,7 +3,7 @@ const db = require('../db')
 
 const Location = db.define('location', {
   message: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false
   },
   latitude: {

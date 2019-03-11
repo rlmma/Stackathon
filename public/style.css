@@ -89,3 +89,11 @@ button:hover {
    color:#DDDDDD;
    border-color:#DDDDDD;
 } */
+
+.overFlow {
+  padding: 15px;
+  width: 50%;
+  height: 600px;
+  overflow: scroll;
+  border: 1px solid #ccc;
+}

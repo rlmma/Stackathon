@@ -21,8 +21,23 @@ class Dictaphone extends Component {
   constructor() {
     super()
     this.state = {
-      category: ''
+      category: '',
+      isRecorded: false,
+      isHidden: true
     }
+  }
+
+  hidePanel = () => {
+    this.setState({isHidden: true})
+  }
+
+  startRecording = () => {
+    this.setState({isRecorded: true})
+    this.setState({isHidden: false})
+  }
+
+  stopRecording = () => {
+    this.setState({isRecorded: false})
   }
 
   chooseCategory = e => {
@@ -61,25 +76,73 @@ class Dictaphone extends Component {
 
     return (
       <div>
-        <button type="submit" onClick={resetTranscript}>
-          Reset
-        </button>
-        <button type="submit" onClick={startListening}>
-          Start
-        </button>
-        <button type="submit" onClick={stopListening}>
-          Stop
-        </button>
-        <span>{transcript}</span>
-        <select onChange={this.chooseCategory}>
-          <option hidden="true">Choose Category</option>
-          <option value="memories">memories</option>
-          <option value="notes">notes</option>
-          <option value="publicMessages">publicMessages</option>
-        </select>
-        <button type="submit" onClick={() => this.save(transcript)}>
-          Save
-        </button>
+        {this.state.isHidden ? (
+          <div>
+            <button
+              type="submit"
+              onClick={() => {
+                startListening()
+                this.startRecording()
+              }}
+            >
+              Start <i className="fa fa-microphone" />
+            </button>
+          </div>
+        ) : (
+          <div>
+            <div>
+              <button
+                type="submit"
+                onClick={() => {
+                  startListening()
+                  this.startRecording()
+                }}
+              >
+                Start <i className="fa fa-microphone" />
+              </button>
+              <button
+                type="submit"
+                onClick={() => {
+                  stopListening()
+                  this.stopRecording()
+                }}
+              >
+                Stop <i className="fa fa-pause-circle" />
+              </button>
+              <button type="submit" onClick={resetTranscript}>
+                Reset <i className="fa fa-undo" />
+              </button>
+              <span>{transcript}</span>
+              <select onChange={this.chooseCategory}>
+                <option hidden="true">Choose Category</option>
+                <option value="memories">memories</option>
+                <option value="notes">notes</option>
+                <option value="publicMessages">publicMessages</option>
+              </select>
+              <button
+                type="submit"
+                onClick={() => {
+                  this.save(transcript)
+                  this.stopRecording()
+                  stopListening()
+                }}
+              >
+                Save
+              </button>
+              <button
+                type="submit"
+                onClick={() => {
+                  this.hidePanel()
+                  resetTranscript()
+                }}
+              >
+                Exit
+              </button>
+            </div>
+
+            {this.state.isRecorded ? <div>Speak now.</div> : ''}
+          </div>
+        )}
       </div>
     )
   }

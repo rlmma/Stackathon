@@ -1,5 +1,7 @@
 const {User, Location, db} = require('./server/db/models')
 
+const publicMessages = require('./publicMessagesData.json')
+
 const userData = [
   {email: 'hoyer@icloud.com', password: 'qwerty'},
   {email: 'crobles@live.com', password: 'qwerty'},
@@ -10,7 +12,7 @@ const userData = [
 const locationData = [
   {
     message: 'hello1',
-    latitude: 41.8901722,
+    latitude: 41.890172,
     longitude: -87.6268221
   },
   {
@@ -53,6 +55,10 @@ const seed = async () => {
       returning: true
     })
 
+    const publicMessagesLocations = await Location.bulkCreate(publicMessages, {
+      returning: true
+    })
+
     const [user1, user2, user3, user4, user5] = users
     const [
       loc1,
@@ -69,9 +75,14 @@ const seed = async () => {
 
     await user1.setLocations([loc1, loc2, loc3])
     await user2.setLocations([loc4, loc5, loc6])
-    await user3.setLocations([loc7])
-    await user4.setLocations([loc8])
+    await user3.setLocations([loc7, loc8])
+    // await user4.setLocations([loc8])
     await user5.setLocations([loc9, loc10])
+
+    await user4.setLocations([...publicMessagesLocations])
+    // for (let i = 0; i < publicMessagesLocations.length; i ++) {
+    //   await  publicMessagesLocations[i].hasUser(userData[4])
+    // }
   } catch (err) {
     console.log(err)
   }

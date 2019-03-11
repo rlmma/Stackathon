@@ -18,7 +18,7 @@ export class UserHome extends Component {
       marker: [location.latitude, location.longitude],
       message: [location.message],
       category: location.category,
-      date: location.createdAt.slice(0, 10)
+      date: [location.createdAt.slice(0, 10)]
     }))
 
     const path = this.props.location.pathname
