@@ -30,19 +30,6 @@ class Demo extends React.Component {
 
 const options = {
   positionOptions: {
-    enableHighAccuracy: false,
-    maximumAge: 0,
-    timeout: 2000,
-    distanceFilter: 1
-  },
-  watchPosition: false,
-  userDecisionTimeout: null,
-  suppressLocationOnMount: false,
-  geolocationProvider: navigator.geolocation
-}
-
-const optionss = {
-  positionOptions: {
     enableHighAccuracy: false
   },
   userDecisionTimeout: 5000
@@ -60,4 +47,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(geolocated(optionss)(Demo))
+export default connect(mapState, mapDispatch)(geolocated(options)(Demo))

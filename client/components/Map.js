@@ -55,8 +55,8 @@ class MapView extends React.Component {
       longitude: roundNumber(lng, 7),
       category
     }
-    this.props.addLocation(obj, this.props.userId)
     this.setState({markers: [], isClicked: false})
+    this.props.addLocation(obj, this.props.userId)
   }
 
   chooseCategory = e => {

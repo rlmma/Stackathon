@@ -11,32 +11,34 @@ const userData = [
 ]
 const locationData = [
   {
-    message: 'hello1',
+    message: 'buy mozarella and proscuitto',
     latitude: 41.890172,
     longitude: -87.6268221
   },
   {
-    message: 'hello2',
+    message: 'had a best pizza with pepperoni',
     latitude: 41.8928812,
     longitude: -87.633054,
     category: 'memories'
   },
-  {message: 'hello3', latitude: 41.8966653, longitude: -87.6231055},
-  {message: 'hello4', latitude: 41.8994121, longitude: -87.6297974},
+  {message: 'grab some books', latitude: 41.8966653, longitude: -87.6231055},
+  {message: '', latitude: 41.8994121, longitude: -87.6297974},
   {
-    message: 'hello5',
+    message:
+      'A few weeks ago we had to pay a union electrician for 6 hours of labor so he could literally unlock a building phone room door for us after hours and leave.',
     latitude: 41.8850925,
     longitude: -87.6228153,
     category: 'publicMessages'
   },
   {
-    message: 'hello6',
+    message:
+      'A great place to work with great views and tons of lunch options without EVER having to go outside.',
     latitude: 41.8850925,
     longitude: -87.6228153,
     category: 'publicMessages'
   },
-  {message: 'hello7', latitude: 41.8945522, longitude: -87.6609077},
-  {message: 'hello8', latitude: 41.8825394, longitude: -87.6214428},
+  {message: 'hello7', latitude: 41.8850925, longitude: -87.6228153},
+  {message: 'weekend concert', latitude: 41.8825394, longitude: -87.6214428},
   {message: 'hello9', latitude: 41.8838175, longitude: -87.6327679},
   {message: 'hello10', latitude: 41.8799836, longitude: -87.6200696}
 ]
@@ -73,16 +75,11 @@ const seed = async () => {
       loc10
     ] = locations
 
-    await user1.setLocations([loc1, loc2, loc3])
-    await user2.setLocations([loc4, loc5, loc6])
-    await user3.setLocations([loc7, loc8])
-    // await user4.setLocations([loc8])
-    await user5.setLocations([loc9, loc10])
-
+    await user1.setLocations([loc1, loc2, loc3, loc8, loc6])
+    await user2.setLocations([loc4, loc5])
+    await user3.setLocations([loc7])
     await user4.setLocations([...publicMessagesLocations])
-    // for (let i = 0; i < publicMessagesLocations.length; i ++) {
-    //   await  publicMessagesLocations[i].hasUser(userData[4])
-    // }
+    await user5.setLocations([loc9, loc10])
   } catch (err) {
     console.log(err)
   }
