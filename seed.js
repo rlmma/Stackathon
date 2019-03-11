@@ -7,7 +7,8 @@ const userData = [
   {email: 'crobles@live.com', password: 'qwerty'},
   {email: 'paulv@mac.com', password: 'qwerty'},
   {email: 'boein@verizon.net', password: 'qwerty'},
-  {email: 'trygstad@yahoo.com', password: 'qwerty'}
+  {email: 'trygstad@yahoo.com', password: 'qwerty'},
+  {email: 'qwerty@yahoo.com', password: 'qwerty'}
 ]
 const locationData = [
   {
@@ -43,6 +44,79 @@ const locationData = [
   {message: 'hello10', latitude: 41.8799836, longitude: -87.6200696}
 ]
 
+const locationsChicago = [
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.9069,
+    longitude: -87.646358,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.907503,
+    longitude: -87.626983,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.90278,
+    longitude: -87.645012,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.9047858,
+    longitude: -87.6357499,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.8794928,
+    longitude: -87.621882,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.8838296,
+    longitude: -87.6499921,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.8933282,
+    longitude: -87.6392991,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.8819191,
+    longitude: -87.6211,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.8729494,
+    longitude: -87.6220409,
+    category: 'publicMessages'
+  },
+  {
+    message:
+      'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.',
+    latitude: 41.8740022,
+    longitude: -87.599292,
+    category: 'publicMessages'
+  }
+]
+
 const seed = async () => {
   try {
     await db.sync({
@@ -61,7 +135,11 @@ const seed = async () => {
       returning: true
     })
 
-    const [user1, user2, user3, user4, user5] = users
+    const chicagoLocations = await Location.bulkCreate(locationsChicago, {
+      returning: true
+    })
+
+    const [user1, user2, user3, user4, user5, user6] = users
     const [
       loc1,
       loc2,
@@ -80,6 +158,7 @@ const seed = async () => {
     await user3.setLocations([loc7])
     await user4.setLocations([...publicMessagesLocations])
     await user5.setLocations([loc9, loc10])
+    await user6.setLocations([...chicagoLocations])
   } catch (err) {
     console.log(err)
   }
